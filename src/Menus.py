@@ -5,7 +5,7 @@ from enum import IntEnum
 
 
 
-screenWidth, screenHeight, screenScale = 0, 0, 1
+screenWidth, screenHeight, screenScale, widthOffset, heightOffset = 0, 0, 1, 0, 0
 pygameEvents = 0
 
 
@@ -16,13 +16,15 @@ class Types(IntEnum):
     MAIN = 3
 
 
-def setScreenSize(width: int, height: int, scale: int):
+def setScreenSize(width: int, height: int, scale: int, offsetW: int, offsetH: int):
     """Sets the screen size to be used by the menus."""
-    global screenWidth, screenHeight, screenScale
+    global screenWidth, screenHeight, screenScale, widthOffset, heightOffset
     screenWidth  = width
     screenHeight = height
     screenScale  = scale
-    Ui.setScreenScale(scale)
+    widthOffset  = offsetW
+    heightOffset = offsetH
+    Ui.setScreenScale(scale, offsetW, offsetH)
 
 
 def updateMenus(screen: pygame.Surface, currentMenu: Types, events: pygame.event):
@@ -57,10 +59,10 @@ def notLoggedIn(screen: pygame.Surface):
             mouseClicked = True
 
     # Draw circles.
-    pygame.draw.circle(screen, (0,   0,   0  ), (screenScale*screenWidth // 2, screenScale*-30), screenScale*700, 2)
-    pygame.draw.circle(screen, (0,   0,   0  ), (screenScale*screenWidth // 2, screenScale*300), screenScale*243)
-    pygame.draw.circle(screen, (255, 255, 255), (screenScale*screenWidth // 2, screenScale*300), screenScale*225, 2)
-    pygame.draw.circle(screen, (255, 255, 255), (screenScale*screenWidth // 2, screenScale*300), screenScale*235, 2)
+    pygame.draw.circle(screen, (0,   0,   0  ), (screenScale*screenWidth//2+widthOffset, screenScale*-30+heightOffset), screenScale*700, 2)
+    pygame.draw.circle(screen, (0,   0,   0  ), (screenScale*screenWidth//2+widthOffset, screenScale*300+heightOffset), screenScale*243)
+    pygame.draw.circle(screen, (255, 255, 255), (screenScale*screenWidth//2+widthOffset, screenScale*300+heightOffset), screenScale*225, 2)
+    pygame.draw.circle(screen, (255, 255, 255), (screenScale*screenWidth//2+widthOffset, screenScale*300+heightOffset), screenScale*235, 2)
 
     # Sign up and Login buttons.
     if Ui.button(screen, "Inscription", screenWidth//2, 800, 100, mouseClicked):
@@ -84,13 +86,11 @@ def signUp(screen: pygame.Surface):
             pygameEvents.remove(event)
 
     # Draw circles.
-    pygame.draw.circle(screen, (0, 0, 0), (screenScale*screenWidth // 2, screenScale*(-1125)),               screenScale*1300, 2)
-    pygame.draw.circle(screen, (0, 0, 0), (screenScale*screenWidth // 2, screenScale*(screenHeight + 1125)), screenScale*1300, 2)
+    pygame.draw.circle(screen, (0, 0, 0), (screenScale*screenWidth//2+widthOffset, screenScale*(-1125)              +heightOffset), screenScale*1300, 2)
+    pygame.draw.circle(screen, (0, 0, 0), (screenScale*screenWidth//2+widthOffset, screenScale*(screenHeight + 1125)+heightOffset), screenScale*1300, 2)
 
     # Draw text.
-    font = pygame.font.SysFont(None, int(100 * screenScale))
-    img = font.render("Inscription", True, (0, 0, 0))
-    screen.blit(img, (screenScale*screenWidth//2 - img.get_width()//2, screenScale*60))
+    Ui.text(screen, "Inscription", screenWidth//2, 60, 100)
 
     # Draw the back button.
     if (Ui.button(screen, "<", 37, 50, 100, mouseClicked)):
@@ -150,13 +150,11 @@ def logIn(screen: pygame.Surface):
             pygameEvents.remove(event)
 
     # Draw circles.
-    pygame.draw.circle(screen, (0, 0, 0), (screenScale*screenWidth // 2, screenScale*(-1100)),              screenScale*1300, 2)
-    pygame.draw.circle(screen, (0, 0, 0), (screenScale*screenWidth // 2, screenScale*(screenHeight + 800)), screenScale*1300, 2)
+    pygame.draw.circle(screen, (0, 0, 0), (screenScale*screenWidth//2+widthOffset, screenScale*(-1100)             +heightOffset), screenScale*1300, 2)
+    pygame.draw.circle(screen, (0, 0, 0), (screenScale*screenWidth//2+widthOffset, screenScale*(screenHeight + 800)+heightOffset), screenScale*1300, 2)
 
     # Draw text.
-    font = pygame.font.SysFont(None, int(100 * screenScale))
-    img = font.render("Connexion", True, (0, 0, 0))
-    screen.blit(img, (screenScale*screenWidth//2 - img.get_width()//2, screenScale*60))
+    Ui.text(screen, "Connexion", screenWidth//2, 60, 100)
 
     # Draw the back button.
     if (Ui.button(screen, "<", 37, 50, 100, mouseClicked)):
@@ -189,9 +187,7 @@ def logIn(screen: pygame.Surface):
     Ui.button(screen, "Se connecter", screenWidth//2, 735, 100, mouseClicked)
 
     # Draw text.
-    font = pygame.font.SysFont(None, int(30*screenScale))
-    img = font.render("OU", True, (0, 0, 0))
-    screen.blit(img, (screenScale*screenWidth//2 - img.get_width()//2, screenScale*820))
+    Ui.text(screen, "OU", screenWidth//2, 835, 30)
 
     # Draw the google login button.
     Ui.button(screen, " G    Continuer avec Google   ", screenWidth//2, 920, 60, mouseClicked)

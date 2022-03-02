@@ -1,24 +1,44 @@
+from turtle import width
 import pygame
 
 
 
-screenScale = 1
+screenScale, widthOffset, heightOffset = 1, 0, 0
 
-def setScreenScale(scale: int):
-    global screenScale
-    screenScale = scale
+def setScreenScale(scale: int, offsetW: int, offsetH: int):
+    global screenScale, widthOffset, heightOffset
+    screenScale  = scale
+    widthOffset  = offsetW
+    heightOffset = offsetH
+
+
+def text(screen: pygame.Surface, caption: str, posX: int, posY: int, textSize: int, color: tuple = (0, 0, 0)):
+    """Draws text on the given surface."""
+
+    # Transform the position according to the screen.
+    posX = posX * screenScale + widthOffset 
+    posY = posY * screenScale + heightOffset
+
+    # Draw the text.
+    font = pygame.font.SysFont(None, int(screenScale * textSize))
+    img = font.render(caption, True, color)
+    screen.blit(img, (posX - img.get_width() // 2, posY - img.get_height() // 2))
 
 
 def button(screen: pygame.Surface, caption: str, posX: int, posY: int, textSize: int, mouseClicked: bool, color: tuple = (0, 0, 0)):
     """Draws a button on the given surface and returns True if it is pressed."""
+
+    # Transform the position according to the screen.
+    posX = posX * screenScale + widthOffset 
+    posY = posY * screenScale + heightOffset
 
     # Create the button's caption.
     font = pygame.font.SysFont(None, int(screenScale * textSize))
     img = font.render(caption, True, color)
 
     # Get the button size.
-    boundingBox = pygame.Rect(posX * screenScale - img.get_width()  // 2 - 10 * screenScale, 
-                              posY * screenScale - img.get_height() // 2 - 10 * screenScale, 
+    boundingBox = pygame.Rect(posX - img.get_width()  // 2 - 10 * screenScale, 
+                              posY - img.get_height() // 2 - 10 * screenScale, 
                               img.get_width()  + 10 * screenScale, 
                               img.get_height() + 10 * screenScale) 
 
@@ -36,21 +56,25 @@ def button(screen: pygame.Surface, caption: str, posX: int, posY: int, textSize:
 
 def checkbox(screen: pygame.surface, caption: str, state: bool, posX: int, posY: int, textSize: int, mouseClicked: bool, color: tuple = (0, 0, 0)):
     """Draws a checkbox. Returns true when it is on, and false when it is off."""
+
+    # Transform the position according to the screen.
+    posX = posX * screenScale + widthOffset 
+    posY = posY * screenScale + heightOffset
     
     # Create the checkbox's caption.
     font = pygame.font.SysFont(None, int(textSize * screenScale))
     img = font.render(caption, True, color)
 
     # Get the checkbox size.
-    boundingBox = pygame.Rect(posX * screenScale - img.get_width()  // 2 - 15 * screenScale - img.get_height(), 
-                              posY * screenScale - img.get_height() // 2 - 10 * screenScale, 
+    boundingBox = pygame.Rect(posX - img.get_width()  // 2 - 15 * screenScale - img.get_height(), 
+                              posY - img.get_height() // 2 - 10 * screenScale, 
                               img.get_width()  + 15 * screenScale, 
                               img.get_height() + 10 * screenScale) 
     
     # Draw the checkbox rectangle.
     pygame.draw.rect(screen, color, (boundingBox.left, boundingBox.top, img.get_height()+5*screenScale, img.get_height()+5*screenScale), int(2 * screenScale), 5)
     if state:
-        pygame.draw.rect(screen, color, (boundingBox.left + 3*screenScale, boundingBox.top + 3*screenScale, img.get_height() - screenScale, img.get_height() - screenScale), 0, 5)
+        pygame.draw.rect(screen, color, (boundingBox.left + 3*screenScale, boundingBox.top + 3*screenScale, img.get_height() - int(1*screenScale), img.get_height() - int(1*screenScale)), 0, 5)
 
     # Draw the checkbox's caption.
     screen.blit(img, (boundingBox.left + img.get_height() + 10*screenScale, boundingBox.top + 5*screenScale))
@@ -64,13 +88,17 @@ def checkbox(screen: pygame.surface, caption: str, state: bool, posX: int, posY:
 def inputStr(screen: pygame.surface, caption: str, selected: bool, input: str, posX: int, posY: int, width: int, textSize: int, events: pygame.event, mouseClicked: bool, maxChars: int = 0, onlyNumbers: bool = False, hideInput: bool = False, color: tuple = (0, 0, 0)):
     """Draws a text input box. Returns a tuple: True when it is selected, False when it isn't and the input string."""
 
+    # Transform the position according to the screen.
+    posX = posX * screenScale + widthOffset
+    posY = posY * screenScale + heightOffset
+
     # Initialize the font.
     font = pygame.font.SysFont(None, int(textSize*screenScale))
 
     # Get the input box's max size.
     img = font.render("W", True, color)
-    boundingBox = pygame.Rect((posX - width // 2 - 10) * screenScale, 
-                              posY * screenScale - img.get_height() // 2 - 10 * screenScale, 
+    boundingBox = pygame.Rect(posX - (width // 2 + 10) * screenScale, 
+                              posY - img.get_height() // 2 - 10 * screenScale, 
                               (width + 10) * screenScale, 
                               img.get_height() + 10 * screenScale) 
 
