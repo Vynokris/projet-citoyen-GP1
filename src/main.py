@@ -4,14 +4,18 @@ import Ui, Menus
 
 # -- APP SETUP -- #
 
-width, height = 729, 1080
-currentMenu = Menus.Types.NOT_LOGGED_IN
 pygame.init()
+
+currentMenu = Menus.Types.NOT_LOGGED_IN
+displayWidth, displayHeight = pygame.display.Info().current_w, pygame.display.Info().current_h
+
+width, height = 729, 1080
+scale = displayHeight / height
 
 display = pygame.display
 display.set_caption("Appli Projet Citoyen")
-screen = pygame.display.set_mode((width, height)) 
-Menus.setScreenSize(width, height)
+screen = pygame.display.set_mode((width * scale, height * scale)) 
+Menus.setScreenSize(width, height, scale)
 
 
 # -- APP MAIN LOOP -- #
