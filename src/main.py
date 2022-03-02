@@ -10,11 +10,12 @@ currentMenu = Menus.Types.NOT_LOGGED_IN
 displayWidth, displayHeight = pygame.display.Info().current_w, pygame.display.Info().current_h
 
 width, height = 729, 1080
-scale = displayHeight / height
+widthScale, heightScale = displayWidth / width, displayHeight / height
+scale = widthScale if widthScale < heightScale else heightScale
 
 display = pygame.display
 display.set_caption("Appli Projet Citoyen")
-screen = pygame.display.set_mode((width * scale, height * scale)) 
+screen = pygame.display.set_mode((int(width * scale), int(height * scale))) 
 Menus.setScreenSize(width, height, scale)
 
 
