@@ -1,5 +1,5 @@
 from enum import IntEnum
-import sys, pygame
+import pygame
 import Ui, Menus
 
 # -- APP SETUP -- #
@@ -16,26 +16,21 @@ Menus.setScreenSize(width, height)
 
 # -- APP MAIN LOOP -- #
 
-while True:
+running = True
+while running:
     # Handle pygame events.
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         if event.type == pygame.QUIT:
-            sys.exit()
+            running = False
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            running = False
     
     # Wipe the screen with white.
     screen.fill((255, 255, 255))
 
-    # Not logged in menu.
-    if currentMenu == Menus.Types.NOT_LOGGED_IN:
-        currentMenu = Menus.notLoggedIn(screen)
-
-    # Sign in menu.
-    elif currentMenu == Menus.Types.SIGN_UP:
-        currentMenu = Menus.signUp(screen)
-
-    # Log in menu.
-    elif currentMenu == Menus.Types.LOG_IN:
-        currentMenu = Menus.logIn(screen)
+    # Update and draw the current menu.
+    currentMenu = Menus.updateMenus(screen, currentMenu, events)
 
     # Update the display.
     display.flip()
