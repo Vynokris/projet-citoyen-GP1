@@ -1,4 +1,3 @@
-from turtle import width
 import pygame
 
 
@@ -47,6 +46,48 @@ def button(screen: pygame.Surface, caption: str, posX: int, posY: int, textSize:
 
     # Draw the button's caption.
     screen.blit(img, (boundingBox.left + 5 * screenScale, boundingBox.top + 5 * screenScale))
+
+    # Check if the button is pressed.
+    if mouseClicked and boundingBox.contains((pygame.mouse.get_pos(), (1, 1))):
+        return True
+    return False
+
+
+def buttonCircle(screen: pygame.Surface, posX: int, posY: int, radius: int, mouseClicked: bool, filled: bool = False, color: tuple = (0, 0, 0)):
+    """"Draws a circular button on the given surface and returns True if it is pressed."""
+
+    # Transform the position according to the screen.
+    posX = posX * screenScale + widthOffset 
+    posY = posY * screenScale + heightOffset
+
+    # Draw the button circle.
+    if (not filled):
+        pygame.draw.circle(screen, (255, 255, 255), (posX, posY), radius * screenScale)
+    pygame.draw.circle(screen, color, (posX, posY), radius * screenScale, 0 if filled else 1)
+
+    # Get the button's bounding box.
+    boundingBox = pygame.Rect(posX - radius, posY - radius, radius * 2, radius * 2) 
+
+    # Check if the button is pressed.
+    if mouseClicked and boundingBox.contains((pygame.mouse.get_pos(), (1, 1))):
+        return True
+    return False
+
+def buttonImage(screen: pygame.Surface, img: pygame.image, posX: int, posY: int, mouseClicked: bool):
+    """Draw a button with an image and returns True if it is pressed."""
+
+    # Transform the position according to the screen.
+    posX = posX * screenScale + widthOffset 
+    posY = posY * screenScale + heightOffset
+
+    # Get the button size.
+    boundingBox = pygame.Rect(posX - img.get_width()  // 2 - 10 * screenScale, 
+                              posY - img.get_height() // 2 - 10 * screenScale, 
+                              img.get_width()  + 10 * screenScale, 
+                              img.get_height() + 10 * screenScale) 
+
+    # Draw the button's caption.
+    screen.blit(img, (boundingBox.left, boundingBox.top))
 
     # Check if the button is pressed.
     if mouseClicked and boundingBox.contains((pygame.mouse.get_pos(), (1, 1))):

@@ -1,4 +1,4 @@
-from turtle import update
+from turtle import window_width
 import pygame
 import Ui
 from enum import IntEnum
@@ -11,9 +11,12 @@ pygameEvents = 0
 
 class Types(IntEnum):
     NOT_LOGGED_IN = 0
-    LOG_IN = 1
+    LOG_IN  = 1
     SIGN_UP = 2
-    MAIN = 3
+    MAIN_0  = 3
+    MAIN_1  = 4
+    MAIN_2  = 5
+    MAIN_3  = 6
 
 
 def setScreenSize(width: int, height: int, scale: int, offsetW: int, offsetH: int):
@@ -46,6 +49,22 @@ def updateMenus(screen: pygame.Surface, currentMenu: Types, events: pygame.event
     elif currentMenu == Types.LOG_IN:
         currentMenu = logIn(screen)
     
+    # Main menu 0.
+    elif currentMenu == Types.MAIN_0:
+        currentMenu = main0(screen);
+    
+    # Main menu 1.
+    elif currentMenu == Types.MAIN_1:
+        currentMenu = main1(screen);
+    
+    # Main menu 2.
+    elif currentMenu == Types.MAIN_2:
+        currentMenu = main2(screen);
+    
+    # Main menu 3.
+    elif currentMenu == Types.MAIN_3:
+        currentMenu = main3(screen);
+    
     return currentMenu
 
 
@@ -59,10 +78,16 @@ def notLoggedIn(screen: pygame.Surface):
             mouseClicked = True
 
     # Draw circles.
-    pygame.draw.circle(screen, (0,   0,   0  ), (screenScale*screenWidth//2+widthOffset, screenScale*-30+heightOffset), screenScale*700, 2)
-    pygame.draw.circle(screen, (0,   0,   0  ), (screenScale*screenWidth//2+widthOffset, screenScale*300+heightOffset), screenScale*243)
-    pygame.draw.circle(screen, (255, 255, 255), (screenScale*screenWidth//2+widthOffset, screenScale*300+heightOffset), screenScale*225, 2)
-    pygame.draw.circle(screen, (255, 255, 255), (screenScale*screenWidth//2+widthOffset, screenScale*300+heightOffset), screenScale*235, 2)
+    pygame.draw.rect  (screen, (216, 247, 188), (widthOffset, heightOffset, screenScale*screenWidth, screenScale*screenHeight))
+    pygame.draw.circle(screen, (255, 255, 255), (screenScale*screenWidth//2+widthOffset, screenScale*-30+heightOffset), screenScale*700)
+    pygame.draw.circle(screen, (166, 239,  68), (screenScale*screenWidth//2+widthOffset, screenScale*-30+heightOffset), screenScale*700, 10)
+    pygame.draw.circle(screen, (176, 133, 114), (screenScale*screenWidth//2+widthOffset, screenScale*300+heightOffset), screenScale*243)
+    pygame.draw.circle(screen, ( 95,  67,  39), (screenScale*screenWidth//2+widthOffset, screenScale*300+heightOffset), screenScale*243, 10)
+
+    # Draw logo.
+    img = pygame.image.load("Resources/logo.png")
+    img = pygame.transform.scale(img, (screenScale * 300, screenScale * 300))
+    screen.blit(img, (screenWidth//2 - img.get_width()/5 + widthOffset, screenScale*300 - img.get_height()/2 + heightOffset))
 
     # Sign up and Login buttons.
     if Ui.button(screen, "Inscription", screenWidth//2, 800, 100, mouseClicked):
@@ -86,6 +111,7 @@ def signUp(screen: pygame.Surface):
             pygameEvents.remove(event)
 
     # Draw circles.
+    pygame.draw.rect  (screen, (216, 247, 188), (widthOffset, heightOffset, screenScale*screenWidth, screenScale*screenHeight))
     pygame.draw.circle(screen, (0, 0, 0), (screenScale*screenWidth//2+widthOffset, screenScale*(-1125)              +heightOffset), screenScale*1300, 2)
     pygame.draw.circle(screen, (0, 0, 0), (screenScale*screenWidth//2+widthOffset, screenScale*(screenHeight + 1125)+heightOffset), screenScale*1300, 2)
 
@@ -150,19 +176,24 @@ def logIn(screen: pygame.Surface):
             pygameEvents.remove(event)
 
     # Draw circles.
-    pygame.draw.circle(screen, (0, 0, 0), (screenScale*screenWidth//2+widthOffset, screenScale*(-1100)             +heightOffset), screenScale*1300, 2)
-    pygame.draw.circle(screen, (0, 0, 0), (screenScale*screenWidth//2+widthOffset, screenScale*(screenHeight + 800)+heightOffset), screenScale*1300, 2)
+    pygame.draw.rect  (screen, (216, 247, 188), (widthOffset, heightOffset, screenScale*screenWidth, screenScale*screenHeight))
+    pygame.draw.circle(screen, (255, 255, 255), (screenScale*screenWidth//2+widthOffset, screenScale*-30+heightOffset), screenScale*700)
+    pygame.draw.circle(screen, (166, 239,  68), (screenScale*screenWidth//2+widthOffset, screenScale*-30+heightOffset), screenScale*700, 10)
+    pygame.draw.circle(screen, (176, 133, 114), (screenScale*screenWidth//2+widthOffset, screenScale*300+heightOffset), screenScale*243)
+    pygame.draw.circle(screen, ( 95,  67,  39), (screenScale*screenWidth//2+widthOffset, screenScale*300+heightOffset), screenScale*243, 10)
 
-    # Draw text.
-    Ui.text(screen, "Connexion", screenWidth//2, 60, 100)
+    # Draw logo.
+    img = pygame.image.load("Resources/logo.png")
+    img = pygame.transform.scale(img, (screenScale * 300, screenScale * 300))
+    screen.blit(img, (screenWidth//2 - img.get_width()/5 + widthOffset, screenScale*300 - img.get_height()/2 + heightOffset))
 
     # Draw the back button.
     if (Ui.button(screen, "<", 37, 50, 100, mouseClicked)):
         return Types.NOT_LOGGED_IN
 
     # Define the input boxes text and positions.
-    inputBoxes = [ ["E-mail",       screenWidth//2, 350, screenWidth - 50], 
-                   ["Mot de passe", screenWidth//2, 450, screenWidth - 50] ]
+    inputBoxes = [ ["E-mail",       screenWidth//2, 735, screenWidth - 50], 
+                   ["Mot de passe", screenWidth//2, 835, screenWidth - 50] ]
     
     # Draw the input boxes.
     inputSelected = False
@@ -177,23 +208,28 @@ def logIn(screen: pygame.Surface):
         logIn.selectedInput = -1
 
     # Draw the show password button.
-    if Ui.button(screen, "Montrer" if logIn.hidePass else "Cacher", screenWidth - 80, 410, 40, mouseClicked):
+    if Ui.button(screen, "Montrer" if logIn.hidePass else "Cacher", screenWidth - 80, 695, 40, mouseClicked):
         logIn.hidePass = not logIn.hidePass
     
     # Draw the "forgotten password" button.
-    Ui.button(screen, "Mot de passe oublié ?", screenWidth - 171, 492, 40, mouseClicked)
+    Ui.button(screen, "Mot de passe oublié ?", screenWidth - 168, 775, 40, mouseClicked)
 
     # Draw the login button.
-    Ui.button(screen, "Se connecter", screenWidth//2, 735, 100, mouseClicked)
+    # TODO: maybe check if the input boxes are filled in.
+    if (Ui.button(screen, "Se connecter", screenWidth//2 + 120, 970, 100, mouseClicked)):
+        return Types.MAIN_0
 
-    # Draw text.
-    Ui.text(screen, "OU", screenWidth//2, 835, 30)
+    # Login with facebook button.
+    img = pygame.image.load("Resources/Facebook.png")
+    img = pygame.transform.scale(img, (screenScale * 60, screenScale * 60))
+    if (Ui.buttonImage(screen, img, 58, 930, mouseClicked)):
+        return Types.MAIN_0
 
-    # Draw the google login button.
-    Ui.button(screen, " G    Continuer avec Google   ", screenWidth//2, 920, 60, mouseClicked)
-
-    # Draw the facebook login button.
-    Ui.button(screen, " F  Continuer avec Facebook ", screenWidth//2, 1000, 60, mouseClicked)
+    # Login with google button.
+    img = pygame.image.load("Resources/Google.png")
+    img = pygame.transform.scale(img, (screenScale * 70, screenScale * 70))
+    if (Ui.buttonImage(screen, img, 58, 1030, mouseClicked)):
+        return Types.MAIN_0
 
     return Types.LOG_IN
 
@@ -203,6 +239,123 @@ logIn.inputs        = [""]*2
 logIn.hidePass      = True
 
 
-def main(screen: pygame.Surface):
-    """Shows the main menu."""
-    return Types.MAIN
+def main0(screen: pygame.Surface):
+    """Shows the leftmost main menu."""
+
+    mouseClicked = False
+    for event in pygameEvents:
+        # Check if the mouse was clicked.
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
+            mouseClicked = True
+        # Go to the next input if enter is pressed.
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and 0 <= logIn.selectedInput <= 2:
+            logIn.selectedInput += 1
+            pygameEvents.remove(event)
+
+    # Draw the bottom line.
+    pygame.draw.line(screen, (0, 0, 0), (widthOffset,                             screenScale * screenHeight + heightOffset - 50 * screenScale), 
+                                        (widthOffset + screenScale * screenWidth, screenScale * screenHeight + heightOffset - 50 * screenScale), 1)
+
+    # Show the bottom navigation buttons.
+    pygame.draw.circle(screen, (100, 100, 100), (widthOffset + 150 * screenScale, screenScale * screenHeight + heightOffset - 80 * screenScale), 60 * screenScale)
+    if (Ui.buttonCircle(screen, 300, screenHeight - 60, 40, mouseClicked)):
+        return Types.MAIN_1
+    if (Ui.buttonCircle(screen, 450, screenHeight - 60, 40, mouseClicked)):
+        return Types.MAIN_2
+    if (Ui.buttonCircle(screen, 600, screenHeight - 60, 40, mouseClicked)):
+        return Types.MAIN_3
+
+    return Types.MAIN_0
+
+
+def main1(screen: pygame.Surface):
+    """Shows the leftmost main menu."""
+
+    mouseClicked = False
+    for event in pygameEvents:
+        # Check if the mouse was clicked.
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
+            mouseClicked = True
+        # Go to the next input if enter is pressed.
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and 0 <= logIn.selectedInput <= 2:
+            logIn.selectedInput += 1
+            pygameEvents.remove(event)
+
+    # Draw the bottom line.
+    pygame.draw.line(screen, (0, 0, 0), (widthOffset,                             screenScale * screenHeight + heightOffset - 50 * screenScale), 
+                                        (widthOffset + screenScale * screenWidth, screenScale * screenHeight + heightOffset - 50 * screenScale), 1)
+
+    # Show the bottom navigation buttons.
+    if (Ui.buttonCircle(screen, 150, screenHeight - 60, 40, mouseClicked)):
+        return Types.MAIN_0
+    pygame.draw.circle(screen, (100, 100, 100), (widthOffset + 300 * screenScale, screenScale * screenHeight + heightOffset - 80 * screenScale), 60 * screenScale)
+    if (Ui.buttonCircle(screen, 450, screenHeight - 60, 40, mouseClicked)):
+        return Types.MAIN_2
+    if (Ui.buttonCircle(screen, 600, screenHeight - 60, 40, mouseClicked)):
+        return Types.MAIN_3
+
+    Ui.text(screen, "\"Better to cum in the sink", screenWidth // 2, screenHeight // 2, 60)
+    Ui.text(screen, "than to sink in the cum\"", screenWidth // 2, screenHeight // 2 + 100, 60)
+    Ui.text(screen, "~Martin Luther King Junior", screenWidth // 2, screenHeight // 2 + 200, 40)
+
+    return Types.MAIN_1
+
+
+def main2(screen: pygame.Surface):
+    """Shows the leftmost main menu."""
+
+    mouseClicked = False
+    for event in pygameEvents:
+        # Check if the mouse was clicked.
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
+            mouseClicked = True
+        # Go to the next input if enter is pressed.
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and 0 <= logIn.selectedInput <= 2:
+            logIn.selectedInput += 1
+            pygameEvents.remove(event)
+
+    # Draw the bottom line.
+    pygame.draw.line(screen, (0, 0, 0), (widthOffset,                             screenScale * screenHeight + heightOffset - 50 * screenScale), 
+                                        (widthOffset + screenScale * screenWidth, screenScale * screenHeight + heightOffset - 50 * screenScale), 1)
+
+    # Show the bottom navigation buttons.
+    if (Ui.buttonCircle(screen, 150, screenHeight - 60, 40, mouseClicked)):
+        return Types.MAIN_0
+    if (Ui.buttonCircle(screen, 300, screenHeight - 60, 40, mouseClicked)):
+        return Types.MAIN_1
+    pygame.draw.circle(screen, (100, 100, 100), (widthOffset + 450 * screenScale, screenScale * screenHeight + heightOffset - 80 * screenScale), 60 * screenScale)
+    if (Ui.buttonCircle(screen, 600, screenHeight - 60, 40, mouseClicked)):
+        return Types.MAIN_3
+
+    # 
+
+    return Types.MAIN_2
+
+
+def main3(screen: pygame.Surface):
+    """Shows the leftmost main menu."""
+
+    mouseClicked = False
+    for event in pygameEvents:
+        # Check if the mouse was clicked.
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
+            mouseClicked = True
+        # Go to the next input if enter is pressed.
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN and 0 <= logIn.selectedInput <= 2:
+            logIn.selectedInput += 1
+            pygameEvents.remove(event)
+
+    # Draw the bottom line.
+    pygame.draw.line(screen, (0, 0, 0), (widthOffset,                             screenScale * screenHeight + heightOffset - 50 * screenScale), 
+                                        (widthOffset + screenScale * screenWidth, screenScale * screenHeight + heightOffset - 50 * screenScale), 1)
+
+    # Show the bottom navigation buttons.
+    if (Ui.buttonCircle(screen, 150, screenHeight - 60, 40, mouseClicked)):
+        return Types.MAIN_0
+    if (Ui.buttonCircle(screen, 300, screenHeight - 60, 40, mouseClicked)):
+        return Types.MAIN_1
+    if (Ui.buttonCircle(screen, 450, screenHeight - 60, 40, mouseClicked)):
+        return Types.MAIN_2
+    pygame.draw.circle(screen, (100, 100, 100), (widthOffset + 600 * screenScale, screenScale * screenHeight + heightOffset - 80 * screenScale), 60 * screenScale)
+
+    return Types.MAIN_3

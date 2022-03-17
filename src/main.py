@@ -1,7 +1,9 @@
-from enum import IntEnum
 from turtle import screensize
 import pygame
-import Ui, Menus
+import Menus
+
+# https://github.com/kivy/python-for-android
+
 
 # -- APP SETUP -- #
 
