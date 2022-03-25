@@ -19,8 +19,19 @@ def text(screen: pygame.Surface, caption: str, posX: int, posY: int, textSize: i
     posY = posY * screenScale + heightOffset
 
     # Draw the text.
-    font = pygame.font.SysFont(None, int(screenScale * textSize))
+    font = pygame.font.Font("Resources/arial.ttf", int(screenScale * textSize))
     img = font.render(caption, True, color)
+    screen.blit(img, (posX - img.get_width() // 2, posY - img.get_height() // 2))
+
+
+def image(screen: pygame.Surface, img: pygame.image, posX: int, posY: int):
+    """Draws an image on the given surface."""
+
+    # Transform the position according to the screen.
+    posX = posX * screenScale + widthOffset
+    posY = posY * screenScale + heightOffset
+
+    # Draw the image.
     screen.blit(img, (posX - img.get_width() // 2, posY - img.get_height() // 2))
 
 
@@ -32,7 +43,7 @@ def button(screen: pygame.Surface, caption: str, posX: int, posY: int, textSize:
     posY = posY * screenScale + heightOffset
 
     # Create the button's caption.
-    font = pygame.font.SysFont(None, int(screenScale * textSize))
+    font = pygame.font.Font("Resources/arial.ttf", int(screenScale * textSize))
     img = font.render(caption, True, color)
 
     # Get the button size.
@@ -53,7 +64,7 @@ def button(screen: pygame.Surface, caption: str, posX: int, posY: int, textSize:
     return False
 
 
-def buttonCircle(screen: pygame.Surface, posX: int, posY: int, radius: int, mouseClicked: bool, filled: bool = False, color: tuple = (0, 0, 0)):
+def buttonCircle(screen: pygame.Surface, posX: int, posY: int, radius: int, mouseClicked: bool, width: int = 0, color: tuple = (0, 0, 0), filled: bool = False, fillColor: tuple = (0, 0, 0)):
     """"Draws a circular button on the given surface and returns True if it is pressed."""
 
     # Transform the position according to the screen.
@@ -61,9 +72,9 @@ def buttonCircle(screen: pygame.Surface, posX: int, posY: int, radius: int, mous
     posY = posY * screenScale + heightOffset
 
     # Draw the button circle.
-    if (not filled):
-        pygame.draw.circle(screen, (255, 255, 255), (posX, posY), radius * screenScale)
-    pygame.draw.circle(screen, color, (posX, posY), radius * screenScale, 0 if filled else 1)
+    if filled:
+        pygame.draw.circle(screen, fillColor, (posX, posY), radius * screenScale)
+    pygame.draw.circle(screen, color, (posX, posY), radius * screenScale, width)
 
     # Get the button's bounding box.
     boundingBox = pygame.Rect(posX - radius, posY - radius, radius * 2, radius * 2) 
@@ -103,7 +114,7 @@ def checkbox(screen: pygame.surface, caption: str, state: bool, posX: int, posY:
     posY = posY * screenScale + heightOffset
     
     # Create the checkbox's caption.
-    font = pygame.font.SysFont(None, int(textSize * screenScale))
+    font = pygame.font.Font("Resources/arial.ttf", int(textSize * screenScale))
     img = font.render(caption, True, color)
 
     # Get the checkbox size.
@@ -134,7 +145,7 @@ def inputStr(screen: pygame.surface, caption: str, selected: bool, input: str, p
     posY = posY * screenScale + heightOffset
 
     # Initialize the font.
-    font = pygame.font.SysFont(None, int(textSize*screenScale))
+    font = pygame.font.Font("Resources/arial.ttf", int(textSize*screenScale))
 
     # Get the input box's max size.
     img = font.render("W", True, color)
