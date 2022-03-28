@@ -3,6 +3,7 @@ import pygame
 
 
 screenScale, widthOffset, heightOffset = 1, 0, 0
+path = ""
 
 def setScreenScale(scale: int, offsetW: int, offsetH: int):
     global screenScale, widthOffset, heightOffset
@@ -19,7 +20,7 @@ def text(screen: pygame.Surface, caption: str, posX: int, posY: int, textSize: i
     posY = posY * screenScale + heightOffset
 
     # Draw the text.
-    font = pygame.font.Font("Resources/arial.ttf", int(screenScale * textSize))
+    font = pygame.font.Font(path + "Resources/arial.ttf", int(screenScale * textSize))
     img = font.render(caption, True, color)
     screen.blit(img, (posX - img.get_width() // 2, posY - img.get_height() // 2))
 
@@ -43,7 +44,7 @@ def button(screen: pygame.Surface, caption: str, posX: int, posY: int, textSize:
     posY = posY * screenScale + heightOffset
 
     # Create the button's caption.
-    font = pygame.font.Font("Resources/arial.ttf", int(screenScale * textSize))
+    font = pygame.font.Font(path + "Resources/arial.ttf", int(screenScale * textSize))
     img = font.render(caption, True, color)
 
     # Get the button size.
@@ -114,7 +115,7 @@ def checkbox(screen: pygame.surface, caption: str, state: bool, posX: int, posY:
     posY = posY * screenScale + heightOffset
     
     # Create the checkbox's caption.
-    font = pygame.font.Font("Resources/arial.ttf", int(textSize * screenScale))
+    font = pygame.font.Font(path + "Resources/arial.ttf", int(textSize * screenScale))
     img = font.render(caption, True, color)
 
     # Get the checkbox size.
@@ -145,7 +146,7 @@ def inputStr(screen: pygame.surface, caption: str, selected: bool, input: str, p
     posY = posY * screenScale + heightOffset
 
     # Initialize the font.
-    font = pygame.font.Font("Resources/arial.ttf", int(textSize*screenScale))
+    font = pygame.font.Font(path + "Resources/arial.ttf", int(textSize*screenScale))
 
     # Get the input box's max size.
     img = font.render("W", True, color)

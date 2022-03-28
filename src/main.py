@@ -1,8 +1,16 @@
-from turtle import screensize
 import pygame
 import Menus
+from os import environ
+from sys import platform as _sys_platform
 
-# https://github.com/kivy/python-for-android
+
+def platform():
+    if 'ANDROID_ARGUMENT' in environ:
+        return "android"
+    elif _sys_platform in ('linux', 'linux2','linux3'):
+        return "linux"
+    elif _sys_platform in ('win32', 'cygwin'):
+        return 'win'
 
 
 # -- APP SETUP -- #
@@ -21,8 +29,15 @@ scale        =  widthScale                  if widthScale < heightScale else hei
 
 display = pygame.display
 display.set_caption("Appli Projet Citoyen")
-screen = pygame.display.set_mode((displayWidth, displayHeight)) 
+screen = pygame.display.set_mode((displayWidth, displayHeight), pygame.FULLSCREEN) 
 Menus.setScreenSize(width, height, scale, widthOffset, heightOffset)
+
+path = ""
+if platform() == "android":
+    path = "/data/data/org.vegethique.vegethique/files/app/"
+elif platform() == "linux":
+    path = "./"
+Menus.setPath(path)
 
 
 # -- APP MAIN LOOP -- #
