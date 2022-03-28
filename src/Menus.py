@@ -390,6 +390,11 @@ def main2(screen: pygame.Surface):
             logIn.selectedInput += 1
             pygameEvents.remove(event)
 
+    # Draw the map image.
+    img = pygame.image.load("Resources/Map.png")
+    img = pygame.transform.scale(img, (screenScale * img.get_width() * 1.1, screenScale * img.get_height() * 1.1))
+    Ui.image(screen, img, screenWidth//2, img.get_height()//2 - 33)
+
     # Draw the bottom color.
     pygame.draw.rect(screen, (217,233,188), (widthOffset, screenScale * screenHeight + heightOffset - 50 * screenScale, screenScale * screenWidth, 50 * screenScale))
 
