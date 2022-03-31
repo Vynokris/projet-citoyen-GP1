@@ -298,7 +298,7 @@ def main0(screen: pygame.Surface):
     # Show the whole page.
     img = pygame.image.load("Resources/News.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.85), int(screenScale * img.get_height() * 0.85)))
-    Ui.image(screen, img, screenWidth//2, img.get_height()//2)
+    Ui.image(screen, img, screenWidth//2, screenHeight//2)
 
     # Draw the bottom color.
     pygame.draw.rect(screen, (217, 233, 188), (widthOffset, screenScale * screenHeight + heightOffset - 50 * screenScale, screenScale * screenWidth, 50 * screenScale))
@@ -392,7 +392,7 @@ def main2(screen: pygame.Surface):
     # Draw the map image.
     img = pygame.image.load("Resources/Map.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 1.1), int(screenScale * img.get_height() * 1.1)))
-    Ui.image(screen, img, screenWidth//2, img.get_height()//2 - 33)
+    Ui.image(screen, img, screenWidth//2, screenHeight//2 - 33)
 
     # Draw the bottom color.
     pygame.draw.rect(screen, (217,233,188), (widthOffset, screenScale * screenHeight + heightOffset - 50 * screenScale, screenScale * screenWidth, 50 * screenScale))
@@ -430,7 +430,7 @@ def main3(screen: pygame.Surface):
     # Show the whole page.
     img = pygame.image.load("Resources/AccountPage.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
-    Ui.image(screen, img, screenWidth//2, img.get_height()//2 - 20)
+    Ui.image(screen, img, screenWidth//2, screenHeight//2 - 20)
 
     # Draw the bottom color.
     pygame.draw.rect(screen, (217,233,188), (widthOffset, screenScale * screenHeight + heightOffset - 50 * screenScale, screenScale * screenWidth, 50 * screenScale))
@@ -468,7 +468,7 @@ def recipe0(screen: pygame.Surface):
     # Show the whole page.
     img = pygame.image.load("Resources/Recipe Pages/Cocottofu au curry.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
-    Ui.image(screen, img, screenWidth//2, img.get_height()//2 - 20)
+    Ui.image(screen, img, screenWidth//2, screenHeight//2 - 20)
 
     # Draw the back button.
     if Ui.button(screen, "<", 95, 50, 55, mouseClicked, (167, 204, 64)):
@@ -506,7 +506,7 @@ def recipe1(screen: pygame.Surface):
     # Show the whole page.
     img = pygame.image.load("Resources/Recipe Pages/Couscous Express.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
-    Ui.image(screen, img, screenWidth//2, img.get_height()//2 - 20)
+    Ui.image(screen, img, screenWidth//2, screenHeight//2 - 20)
 
     # Draw the back button.
     if Ui.button(screen, "<", 95, 50, 55, mouseClicked, (167, 204, 64)):
@@ -544,7 +544,7 @@ def recipe2(screen: pygame.Surface):
     # Show the whole page.
     img = pygame.image.load("Resources/Recipe Pages/Chili Medio Carne.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
-    Ui.image(screen, img, screenWidth//2, img.get_height()//2 - 20)
+    Ui.image(screen, img, screenWidth//2, screenHeight//2 - 20)
 
     # Draw the back button.
     if Ui.button(screen, "<", 95, 50, 55, mouseClicked, (167, 204, 64)):
