@@ -1,4 +1,3 @@
-from turtle import window_width
 import pygame
 import Ui
 from enum import IntEnum
@@ -228,7 +227,7 @@ def logIn(screen: pygame.Surface):
 
     # Draw logo.
     img = pygame.image.load("Resources/logo.png")
-    img = pygame.transform.scale(img, (screenScale * 300, screenScale * 300))
+    img = pygame.transform.scale(img, (int(screenScale * 300), int(screenScale * 300)))
     Ui.image(screen, img, screenWidth//2, 300)
 
     # Draw the back button.
@@ -265,13 +264,13 @@ def logIn(screen: pygame.Surface):
 
     # Login with facebook button.
     img = pygame.image.load("Resources/Facebook.png")
-    img = pygame.transform.scale(img, (screenScale * 60, screenScale * 60))
+    img = pygame.transform.scale(img, (int(screenScale * 60), int(screenScale * 60)))
     if Ui.buttonImage(screen, img, 58, 930, mouseClicked):
         return Types.MAIN_0
 
     # Login with google button.
     img = pygame.image.load("Resources/Google.png")
-    img = pygame.transform.scale(img, (screenScale * 70, screenScale * 70))
+    img = pygame.transform.scale(img, (int(screenScale * 70), int(screenScale * 70)))
     if Ui.buttonImage(screen, img, 58, 1030, mouseClicked):
         return Types.MAIN_0
 
@@ -298,7 +297,7 @@ def main0(screen: pygame.Surface):
 
     # Show the whole page.
     img = pygame.image.load("Resources/News.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.85, screenScale * img.get_height() * 0.85))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.85), int(screenScale * img.get_height() * 0.85)))
     Ui.image(screen, img, screenWidth//2, img.get_height()//2)
 
     # Draw the bottom color.
@@ -336,24 +335,24 @@ def main1(screen: pygame.Surface):
 
     # Show the header.
     img = pygame.image.load("Resources/Recipes of the day/Recettes Du Jour.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width(), screenScale * img.get_height()))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width()), int(screenScale * img.get_height())))
     Ui.image(screen, img, screenWidth//2, 100)
 
     # Show the first recipe.
     img = pygame.image.load("Resources/Recipes of the day/Cocottofu au curry.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width(), screenScale * img.get_height()))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width()), int(screenScale * img.get_height())))
     if Ui.buttonImage(screen, img, screenWidth//2, 310, mouseClicked):
         return Types.RECIPE_0
 
     # Show the second recipe.
     img = pygame.image.load("Resources/Recipes of the day/Couscous Express.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width(), screenScale * img.get_height()))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width()), int(screenScale * img.get_height())))
     if Ui.buttonImage(screen, img, screenWidth//2, 560, mouseClicked):
         return Types.RECIPE_1
 
     # Show the third recipe.
     img = pygame.image.load("Resources/Recipes of the day/Chili Medio Carne.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width(), screenScale * img.get_height()))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width()), int(screenScale * img.get_height())))
     if Ui.buttonImage(screen, img, screenWidth//2, 810, mouseClicked):
         return Types.RECIPE_2
 
@@ -392,7 +391,7 @@ def main2(screen: pygame.Surface):
 
     # Draw the map image.
     img = pygame.image.load("Resources/Map.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 1.1, screenScale * img.get_height() * 1.1))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 1.1), int(screenScale * img.get_height() * 1.1)))
     Ui.image(screen, img, screenWidth//2, img.get_height()//2 - 33)
 
     # Draw the bottom color.
@@ -430,7 +429,7 @@ def main3(screen: pygame.Surface):
 
     # Show the whole page.
     img = pygame.image.load("Resources/AccountPage.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.87, screenScale * img.get_height() * 0.87))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
     Ui.image(screen, img, screenWidth//2, img.get_height()//2 - 20)
 
     # Draw the bottom color.
@@ -468,7 +467,7 @@ def recipe0(screen: pygame.Surface):
 
     # Show the whole page.
     img = pygame.image.load("Resources/Recipe Pages/Cocottofu au curry.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.87, screenScale * img.get_height() * 0.87))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
     Ui.image(screen, img, screenWidth//2, img.get_height()//2 - 20)
 
     # Draw the back button.
@@ -477,14 +476,14 @@ def recipe0(screen: pygame.Surface):
 
     # Draw the Co2 button.
     img = pygame.image.load("Resources/Recipe Pages/Co2Button.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.87, screenScale * img.get_height() * 0.87))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
     if Ui.buttonImage(screen, img, screenWidth - 80, 210, mouseClicked):
         co2menu.lastMenu = Types.RECIPE_0
         return Types.CO2_COUNTER
 
     # Draw the challenge button.
     img = pygame.image.load("Resources/Recipe Pages/ChallengeButton.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.87, screenScale * img.get_height() * 0.87))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
     if Ui.buttonImage(screen, img, screenWidth//2, screenHeight - img.get_height()//2, mouseClicked):
         return Types.CHALLENGE_0
 
@@ -506,7 +505,7 @@ def recipe1(screen: pygame.Surface):
 
     # Show the whole page.
     img = pygame.image.load("Resources/Recipe Pages/Couscous Express.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.87, screenScale * img.get_height() * 0.87))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
     Ui.image(screen, img, screenWidth//2, img.get_height()//2 - 20)
 
     # Draw the back button.
@@ -515,14 +514,14 @@ def recipe1(screen: pygame.Surface):
 
     # Draw the Co2 button.
     img = pygame.image.load("Resources/Recipe Pages/Co2Button.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.87, screenScale * img.get_height() * 0.87))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
     if Ui.buttonImage(screen, img, screenWidth - 80, 210, mouseClicked):
         co2menu.lastMenu = Types.RECIPE_1
         return Types.CO2_COUNTER
 
     # Draw the challenge button.
     img = pygame.image.load("Resources/Recipe Pages/ChallengeButton.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.87, screenScale * img.get_height() * 0.87))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
     if Ui.buttonImage(screen, img, screenWidth//2, screenHeight - img.get_height()//2, mouseClicked):
         return Types.CHALLENGE_1
 
@@ -544,7 +543,7 @@ def recipe2(screen: pygame.Surface):
 
     # Show the whole page.
     img = pygame.image.load("Resources/Recipe Pages/Chili Medio Carne.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.87, screenScale * img.get_height() * 0.87))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
     Ui.image(screen, img, screenWidth//2, img.get_height()//2 - 20)
 
     # Draw the back button.
@@ -553,14 +552,14 @@ def recipe2(screen: pygame.Surface):
 
     # Draw the Co2 button.
     img = pygame.image.load("Resources/Recipe Pages/Co2Button.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.87, screenScale * img.get_height() * 0.87))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
     if Ui.buttonImage(screen, img, screenWidth - 80, 210, mouseClicked):
         co2menu.lastMenu = Types.RECIPE_2
         return Types.CO2_COUNTER
 
     # Draw the challenge button.
     img = pygame.image.load("Resources/Recipe Pages/ChallengeButton.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.87, screenScale * img.get_height() * 0.87))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
     if Ui.buttonImage(screen, img, screenWidth//2, screenHeight - img.get_height()//2, mouseClicked):
         return Types.CHALLENGE_2
 
@@ -582,12 +581,12 @@ def challenge0(screen: pygame.Surface):
 
     # Show the whole page.
     img = pygame.image.load("Resources/Challenges/Cocottofu au curry.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.95, screenScale * img.get_height() * 0.95))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
     Ui.image(screen, img, screenWidth//2, screenHeight//2 + 5)
 
     # Show the pass button.
     img = pygame.image.load("Resources/Challenges/PassButton.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.95, screenScale * img.get_height() * 0.95))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
     if Ui.buttonImage(screen, img, screenWidth//2, screenHeight - 130, mouseClicked):
         return Types.RECIPE_0
 
@@ -609,12 +608,12 @@ def challenge1(screen: pygame.Surface):
 
     # Show the whole page.
     img = pygame.image.load("Resources/Challenges/Couscous Express.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.95, screenScale * img.get_height() * 0.95))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
     Ui.image(screen, img, screenWidth//2, screenHeight//2 + 5)
 
     # Show the pass button.
     img = pygame.image.load("Resources/Challenges/PassButton.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.95, screenScale * img.get_height() * 0.95))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
     if Ui.buttonImage(screen, img, screenWidth//2, screenHeight - 130, mouseClicked):
         return Types.RECIPE_1
 
@@ -636,12 +635,12 @@ def challenge2(screen: pygame.Surface):
 
     # Show the whole page.
     img = pygame.image.load("Resources/Challenges/Chili Medio Carne.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.95, screenScale * img.get_height() * 0.95))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
     Ui.image(screen, img, screenWidth//2, screenHeight//2 + 5)
 
     # Show the pass button.
     img = pygame.image.load("Resources/Challenges/PassButton.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.95, screenScale * img.get_height() * 0.95))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
     if Ui.buttonImage(screen, img, screenWidth//2, screenHeight - 130, mouseClicked):
         return Types.RECIPE_2
 
@@ -663,7 +662,7 @@ def co2menu(screen: pygame.Surface):
 
     # Show the whole page.
     img = pygame.image.load("Resources/Recipe Pages/Co2.png")
-    img = pygame.transform.scale(img, (screenScale * img.get_width() * 0.95, screenScale * img.get_height() * 0.95))
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
     Ui.image(screen, img, screenWidth//2, screenHeight//2 + 70)
 
     # Draw the back button.
