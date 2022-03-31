@@ -65,22 +65,22 @@ def updateMenus(screen: pygame.Surface, currentMenu: Types, events: pygame.event
     # Main menu 0.
     elif currentMenu == Types.MAIN_0:
         currentMenu = main0(screen)
-        botRectColor = (216, 247, 188)
+        botRectColor = (217, 233, 188)
     
     # Main menu 1.
     elif currentMenu == Types.MAIN_1:
         currentMenu = main1(screen)
-        botRectColor = (216, 247, 188)
+        botRectColor = (217, 233, 188)
     
     # Main menu 2.
     elif currentMenu == Types.MAIN_2:
         currentMenu = main2(screen)
-        botRectColor = (216, 247, 188)
+        botRectColor = (217, 233, 188)
     
     # Main menu 3.
     elif currentMenu == Types.MAIN_3:
         currentMenu = main3(screen)
-        botRectColor = (216, 247, 188)
+        botRectColor = (217, 233, 188)
 
     # Recipe page 0.
     elif currentMenu == Types.RECIPE_0:
