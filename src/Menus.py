@@ -99,13 +99,13 @@ def updateMenus(screen: pygame.Surface, currentMenu: Types, events: pygame.event
     elif currentMenu == Types.CO2_COUNTER:
         currentMenu = co2menu(screen)
 
-    # Draw the two side black rectangles.
+    # Draw the two side white rectangles.
     if widthOffset > 0:
-        pygame.draw.rect(screen, (0, 0, 0), (0, 0, widthOffset, screenHeight * screenScale))
-        pygame.draw.rect(screen, (0, 0, 0), (widthOffset + screenWidth * screenScale, 0, widthOffset, screenHeight * screenScale))
+        pygame.draw.rect(screen, (255, 255, 255), (0, 0, widthOffset, screenHeight * screenScale))
+        pygame.draw.rect(screen, (255, 255, 255), (widthOffset + screenWidth * screenScale, 0, widthOffset, screenHeight * screenScale))
     else:
-        pygame.draw.rect(screen, (0, 0, 0), (0, 0, screenWidth * screenScale, heightOffset))
-        pygame.draw.rect(screen, (0, 0, 0), (0, heightOffset + screenHeight * screenScale, screenWidth * screenScale, heightOffset))
+        pygame.draw.rect(screen, (255, 255, 255), (0, 0, screenWidth * screenScale, heightOffset))
+        pygame.draw.rect(screen, (255, 255, 255), (0, heightOffset + screenHeight * screenScale, screenWidth * screenScale, heightOffset))
     
     return currentMenu
 

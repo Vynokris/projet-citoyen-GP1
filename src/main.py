@@ -15,7 +15,7 @@ width, height = 729, 1080
 widthScale   = displayWidth  / width
 heightScale  = displayHeight / height
 widthOffset  = (displayWidth  - width ) / 2 if widthScale > heightScale else 0
-heightOffset = (displayHeight - height) / 2 if widthScale < heightScale else 0
+heightOffset = (displayHeight - height) / 4 if widthScale < heightScale else 0
 scale        =  widthScale                  if widthScale < heightScale else heightScale
 
 display = pygame.display
@@ -41,16 +41,6 @@ while running:
 
     # Update and draw the current menu.
     currentMenu = Menus.updateMenus(screen, currentMenu, events)
-
-    # Draw white rectangles in offset areas.
-    """
-    if (widthOffset):
-        pygame.draw.rect(screen, (255, 255, 255), (0,                        0, widthOffset, displayHeight))
-        pygame.draw.rect(screen, (255, 255, 255), (displayWidth-widthOffset, 0, widthOffset, displayHeight))
-    elif (heightOffset):
-        pygame.draw.rect(screen, (255, 255, 255), (0, 0,                          displayWidth, heightOffset))
-        pygame.draw.rect(screen, (255, 255, 255), (0, displayHeight-heightOffset, displayWidth, heightOffset))
-    """
 
     # Update the display.
     display.flip()
