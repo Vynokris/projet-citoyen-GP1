@@ -43,33 +43,44 @@ def updateMenus(screen: pygame.Surface, currentMenu: Types, events: pygame.event
     global pygameEvents
     pygameEvents = events
 
+    topRectColor = (255, 255, 255)
+    botRectColor = (255, 255, 255)
+
     # Not logged in menu.
     if currentMenu == Types.NOT_LOGGED_IN:
         currentMenu = notLoggedIn(screen)
+        botRectColor = (216, 247, 188)
 
-    # Sign in menu.
+    # Sign up menu.
     elif currentMenu == Types.SIGN_UP:
         currentMenu = signUp(screen)
+        topRectColor = (216, 247, 188)
+        botRectColor = (216, 247, 188)
 
     # Log in menu.
     elif currentMenu == Types.LOG_IN:
         currentMenu = logIn(screen)
+        botRectColor = (216, 247, 188)
     
     # Main menu 0.
     elif currentMenu == Types.MAIN_0:
         currentMenu = main0(screen)
+        botRectColor = (216, 247, 188)
     
     # Main menu 1.
     elif currentMenu == Types.MAIN_1:
         currentMenu = main1(screen)
+        botRectColor = (216, 247, 188)
     
     # Main menu 2.
     elif currentMenu == Types.MAIN_2:
         currentMenu = main2(screen)
+        botRectColor = (216, 247, 188)
     
     # Main menu 3.
     elif currentMenu == Types.MAIN_3:
         currentMenu = main3(screen)
+        botRectColor = (216, 247, 188)
 
     # Recipe page 0.
     elif currentMenu == Types.RECIPE_0:
@@ -104,8 +115,8 @@ def updateMenus(screen: pygame.Surface, currentMenu: Types, events: pygame.event
         pygame.draw.rect(screen, (255, 255, 255), (0, 0, widthOffset, screenHeight * screenScale))
         pygame.draw.rect(screen, (255, 255, 255), (widthOffset + screenWidth * screenScale, 0, widthOffset, screenHeight * screenScale))
     else:
-        pygame.draw.rect(screen, (255, 255, 255), (0, 0, screenWidth * screenScale, heightOffset))
-        pygame.draw.rect(screen, (255, 255, 255), (0, heightOffset + screenHeight * screenScale, screenWidth * screenScale, heightOffset))
+        pygame.draw.rect(screen, topRectColor,    (0, 0, screenWidth * screenScale, heightOffset))
+        pygame.draw.rect(screen, botRectColor,    (0, heightOffset + screenHeight * screenScale, screenWidth * screenScale, heightOffset))
     
     return currentMenu
 
