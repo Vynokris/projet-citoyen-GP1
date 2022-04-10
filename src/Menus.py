@@ -173,10 +173,13 @@ def signUp(screen: pygame.Surface):
             signUp.selectedInput += 1
             pygameEvents.remove(event)
 
-    # Draw circles.
-    pygame.draw.rect  (screen, (216, 247, 188), (widthOffset, heightOffset, screenScale*screenWidth, screenScale*screenHeight))
-    pygame.draw.circle(screen, (0, 0, 0), (screenScale*screenWidth//2+widthOffset, screenScale*(-1125)              +heightOffset), screenScale*1300, 2)
-    pygame.draw.circle(screen, (0, 0, 0), (screenScale*screenWidth//2+widthOffset, screenScale*(screenHeight + 1125)+heightOffset), screenScale*1300, 2)
+    # Draw the top circle.
+    pygame.draw.circle(screen, (216, 247, 188), (screenScale*screenWidth//2+widthOffset, screenScale*(-1125) + heightOffset), screenScale*1300)
+    pygame.draw.circle(screen, (166, 239,  68), (screenScale*screenWidth//2+widthOffset, screenScale*(-1125) + heightOffset), screenScale*1300, 8)
+
+    # Draw the bottom circle.
+    pygame.draw.circle(screen, (216, 247, 188), (screenScale*screenWidth//2+widthOffset, screenScale*(screenHeight + 1125)+heightOffset), screenScale*1300)
+    pygame.draw.circle(screen, (166, 239,  68), (screenScale*screenWidth//2+widthOffset, screenScale*(screenHeight + 1125)+heightOffset), screenScale*1300, 8)
 
     # Draw text.
     Ui.text(screen, "Inscription", screenWidth//2, 60, 60)
