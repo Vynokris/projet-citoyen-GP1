@@ -240,13 +240,14 @@ def inputStr(screen: pygame.surface, caption: str, selected: bool, input: str, p
     return (selected, input)
 
 
-def circleSection(screen: pygame.surface, color: tuple, posX: int, posY, radius: float, startAngle: float, stopAngle: float, width:int = 1):
+def circleSection(screen: pygame.surface, color: tuple, posX: int, posY: int, radius: float, startAngle: float, stopAngle: float, width:int = 1):
     """Draws part of a circle on the given surface."""
 
     # Transform the position and radius according to the screen.
     posX = posX * screenScale + widthOffset
     posY = posY * screenScale + heightOffset
     radius *= screenScale
+    width = round(width * screenScale)
 
     # (2pi rad) / (360 deg)
     deg2Rad = 0.01745329251
