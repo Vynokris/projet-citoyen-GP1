@@ -10,6 +10,14 @@ def setScreenScale(scale: int, offsetW: int, offsetH: int):
     widthOffset  = offsetW
     heightOffset = offsetH
 
+def createRectInScreen(centerX: int, centerY: int, width: int, height: int):
+    rect = pygame.Rect(centerX - width // 2, centerY - height // 2, width, height)
+    rect.x += widthOffset
+    rect.y += heightOffset
+    rect.width  *= screenScale
+    rect.height *= screenScale
+    return rect
+
 
 def text(screen: pygame.Surface, caption: str, posX: int, posY: int, textSize: int, color: tuple = (0, 0, 0)):
     """Draws text on the given surface."""
@@ -230,3 +238,29 @@ def inputStr(screen: pygame.surface, caption: str, selected: bool, input: str, p
             input = input[:-1]
 
     return (selected, input)
+
+
+def circleSection(screen: pygame.surface, color: tuple, posX: int, posY, radius: float, startAngle: float, stopAngle: float, width:int = 1):
+    """Draws part of a circle on the given surface."""
+
+    # Transform the position and radius according to the screen.
+    posX = posX * screenScale + widthOffset
+    posY = posY * screenScale + heightOffset
+    radius *= screenScale
+
+    # (2pi rad) / (360 deg)
+    deg2Rad = 0.01745329251
+
+    if width > 2:
+        width -= 2
+        for i in range(-2, 3):
+            rect = pygame.Rect(posX - radius + i, posY - radius, radius * 2, radius * 2)
+            pygame.draw.arc(screen, color, rect, startAngle * deg2Rad, stopAngle * deg2Rad, width)
+
+        for i in range(-2, 3):
+            rect = pygame.Rect(posX - radius, posY - radius + i, radius * 2, radius * 2)
+            pygame.draw.arc(screen, color, rect, startAngle * deg2Rad, stopAngle * deg2Rad, width)
+
+    else:
+        rect = pygame.Rect(posX - radius, posY - radius, radius * 2, radius * 2)
+        pygame.draw.arc(screen, color, rect, startAngle * deg2Rad, stopAngle * deg2Rad, width)

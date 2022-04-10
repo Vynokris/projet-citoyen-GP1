@@ -3,7 +3,9 @@ import Ui
 from enum import IntEnum
 import math
 import time
+import random
 
+random.seed(time.time())
 
 # I need to define lerp here because somehow python doesn't implement it by default lol
 def lerp(val: float, start: float, end: float):
@@ -127,7 +129,7 @@ def updateMenus(screen: pygame.Surface, currentMenu: Types, events: pygame.event
     else:
         pygame.draw.rect(screen, topRectColor,    (0, 0, screenWidth * screenScale, heightOffset))
         pygame.draw.rect(screen, botRectColor,    (0, heightOffset + (screenHeight - 1) * screenScale, screenWidth * screenScale, heightOffset + 3 * screenScale))
-    
+
     return currentMenu
 
 
@@ -534,6 +536,7 @@ def recipe0(screen: pygame.Surface):
     co2Scale = math.sin(time.time() * 5) / 8 + 0.875
     if Ui.buttonCircle(screen, screenWidth - 100, 172, round(40 * co2Scale), mouseClicked, 2, (167, 204, 64), True, (217, 233, 188)):
         co2menu.lastMenu = Types.RECIPE_0
+        resetCo2Meter()
         return Types.CO2_COUNTER
     Ui.text(screen, "Co2", screenWidth - 100, 172, round(25 * co2Scale), (0, 0, 0))
 
@@ -574,6 +577,7 @@ def recipe1(screen: pygame.Surface):
     co2Scale = math.sin(time.time() * 5) / 8 + 0.875
     if Ui.buttonCircle(screen, screenWidth - 100, 177, round(40 * co2Scale), mouseClicked, 2, (167, 204, 64), True, (217, 233, 188)):
         co2menu.lastMenu = Types.RECIPE_1
+        resetCo2Meter()
         return Types.CO2_COUNTER
     Ui.text(screen, "Co2", screenWidth - 100, 177, round(25 * co2Scale), (0, 0, 0))
 
@@ -614,6 +618,7 @@ def recipe2(screen: pygame.Surface):
     co2Scale = math.sin(time.time() * 5) / 8 + 0.875
     if Ui.buttonCircle(screen, screenWidth - 100, 177, round(40 * co2Scale), mouseClicked, 2, (167, 204, 64), True, (217, 233, 188)):
         co2menu.lastMenu = Types.RECIPE_2
+        resetCo2Meter()
         return Types.CO2_COUNTER
     Ui.text(screen, "Co2", screenWidth - 100, 177, round(25 * co2Scale), (0, 0, 0))
 
@@ -738,17 +743,68 @@ def co2menu(screen: pygame.Surface):
             logIn.selectedInput += 1
             pygameEvents.remove(event)
 
-    # Show the whole page.
-    img = pygame.image.load("Resources/Recipe Pages/Co2.png")
-    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
-    Ui.image(screen, img, screenWidth//2, screenHeight//2 + 70)
+    # Increment the Co2 meters.
+    if co2menu.badMeter < 1:
+        co2menu.badMeter += deltaTime
+    elif co2menu.goodMeter < 1:
+        co2menu.goodMeter += deltaTime
+
+    # Clamp Co2 meters.
+    if co2menu.badMeter > 1:
+        co2menu.badMeter = 1
+    if co2menu.goodMeter > 1:
+        co2menu.goodMeter = 1
+
+    # Draw the top circle.
+    pygame.draw.circle(screen, (216, 247, 188), (screenScale*screenWidth//2+widthOffset, -screenScale*510+heightOffset), screenScale*800)
+    pygame.draw.circle(screen, (166, 239,  68), (screenScale*screenWidth//2+widthOffset, -screenScale*510+heightOffset), screenScale*800, 8)
+
+    # Draw the bottom circle.
+    pygame.draw.circle(screen, (216, 247, 188), (screenScale*screenWidth//2+widthOffset, screenScale*(screenHeight + 560)+heightOffset), screenScale*800)
+    pygame.draw.circle(screen, (166, 239,  68), (screenScale*screenWidth//2+widthOffset, screenScale*(screenHeight + 560)+heightOffset), screenScale*800, 8)
 
     # Draw the back button.
     img = pygame.image.load("Resources/Buttons/Back.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.8), int(screenScale * img.get_height() * 0.8)))
-    if Ui.buttonBakedImage(screen, img, 45, 55, mouseClicked):
+    if Ui.buttonBakedImage(screen, img, 45, 100, mouseClicked):
         return co2menu.lastMenu
+
+    # Draw the meter squares background.
+    pygame.draw.rect(screen, (  0,   0,  0), Ui.createRectInScreen(screenWidth//2, screenHeight//2 + 218, 522, 108))
+    pygame.draw.rect(screen, (206, 255, 71), Ui.createRectInScreen(screenWidth//2, screenHeight//2 + 191, 510, 45))
+    pygame.draw.rect(screen, (255,  56, 56), Ui.createRectInScreen(screenWidth//2, screenHeight//2 + 243, 510, 45))
+
+    # Draw the title.
+    Ui.text(screen, "Émissions de CO2",   screenWidth//2, 80, 60, (0, 0, 0))
+    Ui.text(screen, "pour cette recette", screenWidth//2, 160, 60, (0, 0, 0))
+
+    # Draw the meter background.
+    Ui.circleSection(screen, (  0,   0,   0), screenWidth//2, screenHeight//2 + 30, 255, -47, 227, 70)
+    Ui.circleSection(screen, (255, 255, 255), screenWidth//2, screenHeight//2 + 30, 250, -45, 225, 60)
+
+    # Draw the co2 animation.
+    Ui.circleSection(screen, (255,  56, 56), screenWidth//2, screenHeight//2 + 30, 250, lerp(co2menu.badMeter,  225, co2menu.badLevel ), 225, 30)
+    Ui.circleSection(screen, (206, 255, 71), screenWidth//2, screenHeight//2 + 30, 220, lerp(co2menu.goodMeter, 225, co2menu.goodLevel), 225, 30)
+
+    # Draw the labels.
+    Ui.text(screen, "Vos émissions", screenWidth//2, screenHeight//2 + 190, 30, (0, 0, 0))
+    Ui.text(screen, "Émissions pour préparation standard", screenWidth//2, screenHeight//2 + 245, 30, (0, 0, 0))
+
+    # Draw the garbage reduction text.
+    Ui.text(screen, "Félicitations!", screenWidth//2, screenHeight - 160, 45, (0, 0, 0))
+    Ui.text(screen, "Maintenant que diriez-vous de réduire", screenWidth//2, screenHeight - 90, 30, (0, 0, 0))
+    Ui.text(screen, "aussi votre quantité de déchêts ?",     screenWidth//2, screenHeight - 50, 30, (0, 0, 0))
 
     return Types.CO2_COUNTER
 
-co2menu.lastMenu = Types.RECIPE_0
+co2menu.lastMenu  = Types.RECIPE_0
+co2menu.badMeter  = 0
+co2menu.goodMeter = 0
+co2menu.badLevel  = random.randint(-5, 20)
+co2menu.goodLevel = random.randint(80, 105)
+
+def resetCo2Meter():
+    co2menu.badMeter  = 0
+    co2menu.goodMeter = 0
+    co2menu.badLevel  = random.randint(-5, 20)
+    co2menu.goodLevel = random.randint(80, 105)
