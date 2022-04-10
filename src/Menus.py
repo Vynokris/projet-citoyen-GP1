@@ -535,7 +535,7 @@ def recipe0(screen: pygame.Surface):
     Ui.text(screen, "Co2", screenWidth - 100, 172, round(25 * co2Scale), (0, 0, 0))
 
     # Draw the challenge button.
-    img = pygame.image.load("Resources/Recipe Pages/ChallengeButton.png")
+    img = pygame.image.load("Resources/Buttons/Challenge.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
     if Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - img.get_height()//2, mouseClicked):
         return Types.CHALLENGE_0
@@ -575,7 +575,7 @@ def recipe1(screen: pygame.Surface):
     Ui.text(screen, "Co2", screenWidth - 100, 177, round(25 * co2Scale), (0, 0, 0))
 
     # Draw the challenge button.
-    img = pygame.image.load("Resources/Recipe Pages/ChallengeButton.png")
+    img = pygame.image.load("Resources/Buttons/Challenge.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
     if Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - img.get_height()//2, mouseClicked):
         return Types.CHALLENGE_1
@@ -615,7 +615,7 @@ def recipe2(screen: pygame.Surface):
     Ui.text(screen, "Co2", screenWidth - 100, 177, round(25 * co2Scale), (0, 0, 0))
 
     # Draw the challenge button.
-    img = pygame.image.load("Resources/Recipe Pages/ChallengeButton.png")
+    img = pygame.image.load("Resources/Buttons/Challenge.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
     if Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - img.get_height()//2, mouseClicked):
         return Types.CHALLENGE_2
@@ -641,8 +641,14 @@ def challenge0(screen: pygame.Surface):
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
     Ui.image(screen, img, screenWidth//2, screenHeight//2 + 5)
 
+    # Show the accept button.
+    buttonScale = math.sin(time.time() * 5) / 10 + 0.9
+    img = pygame.image.load("Resources/Buttons/Accept.png")
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95 * buttonScale), int(screenScale * img.get_height() * 0.95 * buttonScale)))
+    Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - 285, mouseClicked)
+
     # Show the pass button.
-    img = pygame.image.load("Resources/Challenges/PassButton.png")
+    img = pygame.image.load("Resources/Buttons/Pass.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
     if Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - 130, mouseClicked):
         return Types.RECIPE_0
@@ -668,11 +674,17 @@ def challenge1(screen: pygame.Surface):
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
     Ui.image(screen, img, screenWidth//2, screenHeight//2 + 5)
 
+    # Show the accept button.
+    buttonScale = math.sin(time.time() * 5) / 10 + 0.9
+    img = pygame.image.load("Resources/Buttons/Accept.png")
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95 * buttonScale), int(screenScale * img.get_height() * 0.95 * buttonScale)))
+    Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - 285, mouseClicked)
+
     # Show the pass button.
-    img = pygame.image.load("Resources/Challenges/PassButton.png")
+    img = pygame.image.load("Resources/Buttons/Pass.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
     if Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - 130, mouseClicked):
-        return Types.RECIPE_1
+        return Types.RECIPE_0
 
     return Types.CHALLENGE_1
 
@@ -695,11 +707,17 @@ def challenge2(screen: pygame.Surface):
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
     Ui.image(screen, img, screenWidth//2, screenHeight//2 + 5)
 
+    # Show the accept button.
+    buttonScale = math.sin(time.time() * 5) / 10 + 0.9
+    img = pygame.image.load("Resources/Buttons/Accept.png")
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95 * buttonScale), int(screenScale * img.get_height() * 0.95 * buttonScale)))
+    Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - 285, mouseClicked)
+
     # Show the pass button.
-    img = pygame.image.load("Resources/Challenges/PassButton.png")
+    img = pygame.image.load("Resources/Buttons/Pass.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
     if Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - 130, mouseClicked):
-        return Types.RECIPE_2
+        return Types.RECIPE_0
 
     return Types.CHALLENGE_2
 
