@@ -5,6 +5,7 @@ import Menus
 # -- APP SETUP -- #
 
 pygame.init()
+clock = pygame.time.Clock()
 
 currentMenu = Menus.Types.NOT_LOGGED_IN
 displayWidth, displayHeight = pygame.display.Info().current_w, pygame.display.Info().current_h
@@ -35,7 +36,7 @@ while running:
             running = False
 
     # Get delta time and limit fps.
-    deltaTime = pygame.time.Clock().tick(75) / 1000
+    deltaTime = clock.tick(60) / 1000
 
     # Wipe the screen with white.
     screen.fill((255, 255, 255))

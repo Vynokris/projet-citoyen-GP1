@@ -126,7 +126,7 @@ def updateMenus(screen: pygame.Surface, currentMenu: Types, events: pygame.event
         pygame.draw.rect(screen, (255, 255, 255), (widthOffset + screenWidth * screenScale, 0, widthOffset, screenHeight * screenScale))
     else:
         pygame.draw.rect(screen, topRectColor,    (0, 0, screenWidth * screenScale, heightOffset))
-        pygame.draw.rect(screen, botRectColor,    (0, heightOffset + screenHeight * screenScale, screenWidth * screenScale, heightOffset))
+        pygame.draw.rect(screen, botRectColor,    (0, heightOffset + (screenHeight - 1) * screenScale, screenWidth * screenScale, heightOffset + 3 * screenScale))
     
     return currentMenu
 
