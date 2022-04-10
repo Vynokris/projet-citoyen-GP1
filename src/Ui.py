@@ -12,8 +12,8 @@ def setScreenScale(scale: int, offsetW: int, offsetH: int):
 
 def createRectInScreen(centerX: int, centerY: int, width: int, height: int):
     rect = pygame.Rect(centerX - width // 2, centerY - height // 2, width, height)
-    rect.x += widthOffset
-    rect.y += heightOffset
+    rect.x = rect.x * screenScale + widthOffset
+    rect.y = rect.y * screenScale + heightOffset
     rect.width  *= screenScale
     rect.height *= screenScale
     return rect

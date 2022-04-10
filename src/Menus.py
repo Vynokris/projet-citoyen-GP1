@@ -121,6 +121,8 @@ def updateMenus(screen: pygame.Surface, currentMenu: Types, events: pygame.event
     # Co2 counter.
     elif currentMenu == Types.CO2_COUNTER:
         currentMenu = co2menu(screen)
+        topRectColor = (216, 247, 188)
+        botRectColor = (216, 247, 188)
 
     # Draw the two side white rectangles.
     if widthOffset > 0:
