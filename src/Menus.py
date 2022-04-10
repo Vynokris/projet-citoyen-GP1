@@ -598,8 +598,8 @@ def recipe2(screen: pygame.Surface):
 
     # Show the whole page.
     img = pygame.image.load("Resources/Recipe Pages/Chili Medio Carne.png")
-    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
-    Ui.image(screen, img, screenWidth//2, screenHeight//2 - 20)
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.80)))
+    Ui.image(screen, img, screenWidth//2, screenHeight//2 - 30)
 
     # Draw the back button.
     img = pygame.image.load("Resources/Buttons/Back.png")
