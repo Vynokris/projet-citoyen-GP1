@@ -84,8 +84,14 @@ def buttonCircle(screen: pygame.Surface, posX: int, posY: int, radius: int, mous
         return True
     return False
 
-def buttonImage(screen: pygame.Surface, img: pygame.image, posX: int, posY: int, mouseClicked: bool):
+def buttonImage(screen: pygame.Surface, imgName: str, posX: int, posY: int, mouseClicked: bool, scaleX: float = 1, scaleY: float = -1):
     """Draw a button with an image and returns True if it is pressed."""
+
+    if scaleY == -1:
+        scaleY = scaleX
+
+    img = pygame.image.load(imgName)
+    img = pygame.transform.scale(img, (int(screenScale * scaleX), int(screenScale * scaleY)))
 
     # Transform the position according to the screen.
     posX = posX * screenScale + widthOffset 
@@ -96,6 +102,27 @@ def buttonImage(screen: pygame.Surface, img: pygame.image, posX: int, posY: int,
                               posY - img.get_height() // 2 - 10 * screenScale, 
                               img.get_width()  + 10 * screenScale, 
                               img.get_height() + 10 * screenScale) 
+
+    # Draw the button's caption.
+    screen.blit(img, (boundingBox.left, boundingBox.top))
+
+    # Check if the button is pressed.
+    if mouseClicked and boundingBox.contains((pygame.mouse.get_pos(), (1, 1))):
+        return True
+    return False
+
+def buttonBakedImage(screen: pygame.Surface, img: pygame.image, posX: int, posY: int, mouseClicked: bool):
+    """Draw a button with an image and returns True if it is pressed."""
+
+    # Transform the position according to the screen.
+    posX = posX * screenScale + widthOffset
+    posY = posY * screenScale + heightOffset
+
+    # Get the button size.
+    boundingBox = pygame.Rect(posX - img.get_width()  // 2 - 10 * screenScale,
+                              posY - img.get_height() // 2 - 10 * screenScale,
+                              img.get_width()  + 10 * screenScale,
+                              img.get_height() + 10 * screenScale)
 
     # Draw the button's caption.
     screen.blit(img, (boundingBox.left, boundingBox.top))

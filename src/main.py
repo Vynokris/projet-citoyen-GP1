@@ -1,8 +1,6 @@
 import pygame
 import Menus
 
-# https://github.com/kivy/python-for-android
-
 
 # -- APP SETUP -- #
 
@@ -35,12 +33,15 @@ while running:
             running = False
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             running = False
-    
+
+    # Get delta time and limit fps.
+    deltaTime = pygame.time.Clock().tick(75) / 1000
+
     # Wipe the screen with white.
     screen.fill((255, 255, 255))
 
     # Update and draw the current menu.
-    currentMenu = Menus.updateMenus(screen, currentMenu, events)
+    currentMenu = Menus.updateMenus(screen, currentMenu, events, deltaTime)
 
     # Update the display.
     display.flip()

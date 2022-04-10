@@ -1,10 +1,16 @@
 import pygame
 import Ui
 from enum import IntEnum
+import math
+import time
 
 
+# I need to define lerp here because somehow python doesn't implement it by default lol
+def lerp(val: float, start: float, end: float):
+    return start + val * (end - start)
 
-screenWidth, screenHeight, screenScale, widthOffset, heightOffset = 0, 0, 1, 0, 0
+
+screenWidth, screenHeight, screenScale, widthOffset, heightOffset, deltaTime = 0, 0, 1, 0, 0, 0
 pygameEvents = 0
 
 
@@ -36,7 +42,7 @@ def setScreenSize(width: int, height: int, scale: int, offsetW: int, offsetH: in
     Ui.setScreenScale(scale, offsetW, offsetH)
 
 
-def updateMenus(screen: pygame.Surface, currentMenu: Types, events: pygame.event):
+def updateMenus(screen: pygame.Surface, currentMenu: Types, events: pygame.event, dTime: float):
     """Updates and draws the current menu."""
 
     # Update the global events.
@@ -45,6 +51,10 @@ def updateMenus(screen: pygame.Surface, currentMenu: Types, events: pygame.event
 
     topRectColor = (255, 255, 255)
     botRectColor = (255, 255, 255)
+
+    # Update the deltaTime value.
+    global deltaTime
+    deltaTime = dTime
 
     # Not logged in menu.
     if currentMenu == Types.NOT_LOGGED_IN:
@@ -172,7 +182,9 @@ def signUp(screen: pygame.Surface):
     Ui.text(screen, "Inscription", screenWidth//2, 60, 60)
 
     # Draw the back button.
-    if Ui.button(screen, "<", 37, 50, 55, mouseClicked):
+    img = pygame.image.load("Resources/Buttons/Back.png")
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.8), int(screenScale * img.get_height() * 0.8)))
+    if Ui.buttonBakedImage(screen, img, 45, 55, mouseClicked):
         return Types.NOT_LOGGED_IN
 
     # Define the input boxes text and positions.
@@ -242,7 +254,9 @@ def logIn(screen: pygame.Surface):
     Ui.image(screen, img, screenWidth//2, 300)
 
     # Draw the back button.
-    if Ui.button(screen, "<", 37, 50, 55, mouseClicked):
+    img = pygame.image.load("Resources/Buttons/Back.png")
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.8), int(screenScale * img.get_height() * 0.8)))
+    if Ui.buttonBakedImage(screen, img, 45, 55, mouseClicked):
         return Types.NOT_LOGGED_IN
 
     # Define the input boxes text and positions.
@@ -274,15 +288,11 @@ def logIn(screen: pygame.Surface):
         return Types.MAIN_0
 
     # Login with facebook button.
-    img = pygame.image.load("Resources/Facebook.png")
-    img = pygame.transform.scale(img, (int(screenScale * 60), int(screenScale * 60)))
-    if Ui.buttonImage(screen, img, 58, 930, mouseClicked):
+    if Ui.buttonImage(screen, "Resources/Facebook.png", 58, 930, mouseClicked, 60):
         return Types.MAIN_0
 
     # Login with google button.
-    img = pygame.image.load("Resources/Google.png")
-    img = pygame.transform.scale(img, (int(screenScale * 70), int(screenScale * 70)))
-    if Ui.buttonImage(screen, img, 58, 1030, mouseClicked):
+    if Ui.buttonImage(screen, "Resources/Google.png", 58, 1030, mouseClicked, 70):
         return Types.MAIN_0
 
     return Types.LOG_IN
@@ -292,6 +302,8 @@ logIn.selectedInput = -1
 logIn.inputs        = [""]*2
 logIn.hidePass      = True
 
+# Define the lerp value for the focus button's scale and pos.
+focusButtonLerp = 0
 
 def main0(screen: pygame.Surface):
     """Shows the leftmost main menu."""
@@ -308,8 +320,8 @@ def main0(screen: pygame.Surface):
 
     # Show the whole page.
     img = pygame.image.load("Resources/News.png")
-    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.85), int(screenScale * img.get_height() * 0.85)))
-    Ui.image(screen, img, screenWidth//2, screenHeight//2)
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.82), int(screenScale * img.get_height() * 0.82)))
+    Ui.image(screen, img, screenWidth//2, screenHeight//2 - 15)
 
     # Draw the bottom color.
     pygame.draw.rect(screen, (217, 233, 188), (widthOffset, screenScale * screenHeight + heightOffset - 50 * screenScale, screenScale * screenWidth, 50 * screenScale))
@@ -318,14 +330,21 @@ def main0(screen: pygame.Surface):
     pygame.draw.line(screen, (167, 204, 64), (widthOffset,                             screenScale * screenHeight + heightOffset - 50 * screenScale),
                                              (widthOffset + screenScale * screenWidth, screenScale * screenHeight + heightOffset - 50 * screenScale), 3)
 
+    # Increment the scale and pos of the focus button.
+    global focusButtonLerp
+    if focusButtonLerp < 1:
+        focusButtonLerp += deltaTime * 4
+
     # Show the bottom navigation buttons.
-    pygame.draw.circle(screen, (217, 233, 188), (widthOffset + 150 * screenScale, screenScale * screenHeight + heightOffset - 80 * screenScale), 60 * screenScale)
-    pygame.draw.circle(screen, (167, 204,  64), (widthOffset + 150 * screenScale, screenScale * screenHeight + heightOffset - 80 * screenScale), 60 * screenScale, 4)
-    if Ui.buttonCircle(screen, 300, screenHeight - 60, 40, mouseClicked, 3, (167, 204, 64), True, (255, 255, 255)):
+    Ui.buttonImage(   screen, "Resources/Buttons/NewsFocus.png",      150, screenHeight - int(lerp(focusButtonLerp, 60, 73)), mouseClicked, int(lerp(focusButtonLerp, 100, 130)))
+    if Ui.buttonImage(screen, "Resources/Buttons/RecipesUnfocus.png", 300, screenHeight - 60, mouseClicked, 100):
+        focusButtonLerp = 0
         return Types.MAIN_1
-    if Ui.buttonCircle(screen, 450, screenHeight - 60, 40, mouseClicked, 3, (167, 204, 64), True, (255, 255, 255)):
+    if Ui.buttonImage(screen, "Resources/Buttons/MapUnfocus.png",     450, screenHeight - 60, mouseClicked, 100):
+        focusButtonLerp = 0
         return Types.MAIN_2
-    if Ui.buttonCircle(screen, 600, screenHeight - 60, 40, mouseClicked, 3, (167, 204, 64), True, (255, 255, 255)):
+    if Ui.buttonImage(screen, "Resources/Buttons/UserUnfocus.png",    600, screenHeight - 60, mouseClicked, 100):
+        focusButtonLerp = 0
         return Types.MAIN_3
 
     return Types.MAIN_0
@@ -352,19 +371,19 @@ def main1(screen: pygame.Surface):
     # Show the first recipe.
     img = pygame.image.load("Resources/Recipes of the day/Cocottofu au curry.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width()), int(screenScale * img.get_height())))
-    if Ui.buttonImage(screen, img, screenWidth//2, 310, mouseClicked):
+    if Ui.buttonBakedImage(screen, img, screenWidth//2, 310, mouseClicked):
         return Types.RECIPE_0
 
     # Show the second recipe.
     img = pygame.image.load("Resources/Recipes of the day/Couscous Express.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width()), int(screenScale * img.get_height())))
-    if Ui.buttonImage(screen, img, screenWidth//2, 560, mouseClicked):
+    if Ui.buttonBakedImage(screen, img, screenWidth//2, 560, mouseClicked):
         return Types.RECIPE_1
 
     # Show the third recipe.
     img = pygame.image.load("Resources/Recipes of the day/Chili Medio Carne.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width()), int(screenScale * img.get_height())))
-    if Ui.buttonImage(screen, img, screenWidth//2, 810, mouseClicked):
+    if Ui.buttonBakedImage(screen, img, screenWidth//2, 810, mouseClicked):
         return Types.RECIPE_2
 
     # Draw the bottom color.
@@ -374,14 +393,21 @@ def main1(screen: pygame.Surface):
     pygame.draw.line(screen, (167,204,64), (widthOffset,                             screenScale * screenHeight + heightOffset - 50 * screenScale),
                                            (widthOffset + screenScale * screenWidth, screenScale * screenHeight + heightOffset - 50 * screenScale), 2)
 
+    # Increment the scale and pos of the focus button.
+    global focusButtonLerp
+    if focusButtonLerp < 1:
+        focusButtonLerp += deltaTime * 4
+
     # Show the bottom navigation buttons.
-    if Ui.buttonCircle(screen, 150, screenHeight - 60, 40, mouseClicked, 3, (167, 204, 64), True, (255, 255, 255)):
+    if Ui.buttonImage(screen, "Resources/Buttons/NewsUnfocus.png",  150, screenHeight - 60, mouseClicked, 100):
+        focusButtonLerp = 0
         return Types.MAIN_0
-    pygame.draw.circle(screen, (217, 233, 188), (widthOffset + 300 * screenScale, screenScale * screenHeight + heightOffset - 80 * screenScale), 60 * screenScale)
-    pygame.draw.circle(screen, (167, 204,  64), (widthOffset + 300 * screenScale, screenScale * screenHeight + heightOffset - 80 * screenScale), 60 * screenScale, 4)
-    if Ui.buttonCircle(screen, 450, screenHeight - 60, 40, mouseClicked, 3, (167, 204, 64), True, (255, 255, 255)):
+    Ui.buttonImage(   screen, "Resources/Buttons/RecipesFocus.png", 300, screenHeight - int(lerp(focusButtonLerp, 60, 73)), mouseClicked, int(lerp(focusButtonLerp, 100, 130)))
+    if Ui.buttonImage(screen, "Resources/Buttons/MapUnfocus.png",   450, screenHeight - 60, mouseClicked, 100):
+        focusButtonLerp = 0
         return Types.MAIN_2
-    if Ui.buttonCircle(screen, 600, screenHeight - 60, 40, mouseClicked, 3, (167, 204, 64), True, (255, 255, 255)):
+    if Ui.buttonImage(screen, "Resources/Buttons/UserUnfocus.png",  600, screenHeight - 60, mouseClicked, 100):
+        focusButtonLerp = 0
         return Types.MAIN_3
 
     return Types.MAIN_1
@@ -412,14 +438,21 @@ def main2(screen: pygame.Surface):
     pygame.draw.line(screen, (167,204,64), (widthOffset,                             screenScale * screenHeight + heightOffset - 50 * screenScale),
                                            (widthOffset + screenScale * screenWidth, screenScale * screenHeight + heightOffset - 50 * screenScale), 2)
 
+    # Increment the scale and pos of the focus button.
+    global focusButtonLerp
+    if focusButtonLerp < 1:
+        focusButtonLerp += deltaTime * 4
+
     # Show the bottom navigation buttons.
-    if Ui.buttonCircle(screen, 150, screenHeight - 60, 40, mouseClicked, 3, (167, 204, 64), True, (255, 255, 255)):
+    if Ui.buttonImage(screen, "Resources/Buttons/NewsUnfocus.png",    150, screenHeight - 60, mouseClicked, 100):
+        focusButtonLerp = 0
         return Types.MAIN_0
-    if Ui.buttonCircle(screen, 300, screenHeight - 60, 40, mouseClicked, 3, (167, 204, 64), True, (255, 255, 255)):
+    if Ui.buttonImage(screen, "Resources/Buttons/RecipesUnfocus.png", 300, screenHeight - 60, mouseClicked, 100):
+        focusButtonLerp = 0
         return Types.MAIN_1
-    pygame.draw.circle(screen, (217, 233, 188), (widthOffset + 450 * screenScale, screenScale * screenHeight + heightOffset - 80 * screenScale), 60 * screenScale)
-    pygame.draw.circle(screen, (167, 204,  64), (widthOffset + 450 * screenScale, screenScale * screenHeight + heightOffset - 80 * screenScale), 60 * screenScale, 4)
-    if Ui.buttonCircle(screen, 600, screenHeight - 60, 40, mouseClicked, 3, (167, 204, 64), True, (255, 255, 255)):
+    Ui.buttonImage(   screen, "Resources/Buttons/MapFocus.png",       450, screenHeight - int(lerp(focusButtonLerp, 60, 73)), mouseClicked, int(lerp(focusButtonLerp, 100, 130)))
+    if Ui.buttonImage(screen, "Resources/Buttons/UserUnfocus.png",    600, screenHeight - 60, mouseClicked, 100):
+        focusButtonLerp = 0
         return Types.MAIN_3
 
     return Types.MAIN_2
@@ -450,15 +483,22 @@ def main3(screen: pygame.Surface):
     pygame.draw.line(screen, (167,204,64), (widthOffset,                             screenScale * screenHeight + heightOffset - 50 * screenScale),
                                            (widthOffset + screenScale * screenWidth, screenScale * screenHeight + heightOffset - 50 * screenScale), 2)
 
+    # Increment the scale and pos of the focus button.
+    global focusButtonLerp
+    if focusButtonLerp < 1:
+        focusButtonLerp += deltaTime * 4
+
     # Show the bottom navigation buttons.
-    if Ui.buttonCircle(screen, 150, screenHeight - 60, 40, mouseClicked, 3, (167, 204, 64), True, (255, 255, 255)):
+    if Ui.buttonImage(screen, "Resources/Buttons/NewsUnfocus.png",    150, screenHeight - 60, mouseClicked, 100):
+        focusButtonLerp = 0
         return Types.MAIN_0
-    if Ui.buttonCircle(screen, 300, screenHeight - 60, 40, mouseClicked, 3, (167, 204, 64), True, (255, 255, 255)):
+    if Ui.buttonImage(screen, "Resources/Buttons/RecipesUnfocus.png", 300, screenHeight - 60, mouseClicked, 100):
+        focusButtonLerp = 0
         return Types.MAIN_1
-    if Ui.buttonCircle(screen, 450, screenHeight - 60, 40, mouseClicked, 3, (167, 204, 64), True, (255, 255, 255)):
+    if Ui.buttonImage(screen, "Resources/Buttons/MapUnfocus.png",     450, screenHeight - 60, mouseClicked, 100):
+        focusButtonLerp = 0
         return Types.MAIN_2
-    pygame.draw.circle(screen, (217, 233, 188), (widthOffset + 600 * screenScale, screenScale * screenHeight + heightOffset - 80 * screenScale), 60 * screenScale)
-    pygame.draw.circle(screen, (167, 204,  64), (widthOffset + 600 * screenScale, screenScale * screenHeight + heightOffset - 80 * screenScale), 60 * screenScale, 4)
+    Ui.buttonImage(   screen, "Resources/Buttons/UserFocus.png",      600, screenHeight - int(lerp(focusButtonLerp, 60, 73)), mouseClicked, int(lerp(focusButtonLerp, 100, 130)))
 
     return Types.MAIN_3
 
@@ -482,20 +522,22 @@ def recipe0(screen: pygame.Surface):
     Ui.image(screen, img, screenWidth//2, screenHeight//2 - 20)
 
     # Draw the back button.
-    if Ui.button(screen, "<", 95, 50, 55, mouseClicked, (167, 204, 64)):
+    img = pygame.image.load("Resources/Buttons/Back.png")
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.8), int(screenScale * img.get_height() * 0.8)))
+    if Ui.buttonBakedImage(screen, img, 103, 55, mouseClicked):
         return Types.MAIN_1
 
     # Draw the Co2 button.
-    img = pygame.image.load("Resources/Recipe Pages/Co2Button.png")
-    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
-    if Ui.buttonImage(screen, img, screenWidth - 80, 210, mouseClicked):
+    co2Scale = math.sin(time.time() * 5) / 8 + 0.875
+    if Ui.buttonCircle(screen, screenWidth - 100, 172, round(40 * co2Scale), mouseClicked, 2, (167, 204, 64), True, (217, 233, 188)):
         co2menu.lastMenu = Types.RECIPE_0
         return Types.CO2_COUNTER
+    Ui.text(screen, "Co2", screenWidth - 100, 172, round(25 * co2Scale), (0, 0, 0))
 
     # Draw the challenge button.
     img = pygame.image.load("Resources/Recipe Pages/ChallengeButton.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
-    if Ui.buttonImage(screen, img, screenWidth//2, screenHeight - img.get_height()//2, mouseClicked):
+    if Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - img.get_height()//2, mouseClicked):
         return Types.CHALLENGE_0
 
     return Types.RECIPE_0
@@ -520,20 +562,22 @@ def recipe1(screen: pygame.Surface):
     Ui.image(screen, img, screenWidth//2, screenHeight//2 - 20)
 
     # Draw the back button.
-    if Ui.button(screen, "<", 95, 50, 55, mouseClicked, (167, 204, 64)):
+    img = pygame.image.load("Resources/Buttons/Back.png")
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.8), int(screenScale * img.get_height() * 0.8)))
+    if Ui.buttonBakedImage(screen, img, 103, 55, mouseClicked):
         return Types.MAIN_1
 
     # Draw the Co2 button.
-    img = pygame.image.load("Resources/Recipe Pages/Co2Button.png")
-    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
-    if Ui.buttonImage(screen, img, screenWidth - 80, 210, mouseClicked):
+    co2Scale = math.sin(time.time() * 5) / 8 + 0.875
+    if Ui.buttonCircle(screen, screenWidth - 100, 177, round(40 * co2Scale), mouseClicked, 2, (167, 204, 64), True, (217, 233, 188)):
         co2menu.lastMenu = Types.RECIPE_1
         return Types.CO2_COUNTER
+    Ui.text(screen, "Co2", screenWidth - 100, 177, round(25 * co2Scale), (0, 0, 0))
 
     # Draw the challenge button.
     img = pygame.image.load("Resources/Recipe Pages/ChallengeButton.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
-    if Ui.buttonImage(screen, img, screenWidth//2, screenHeight - img.get_height()//2, mouseClicked):
+    if Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - img.get_height()//2, mouseClicked):
         return Types.CHALLENGE_1
 
     return Types.RECIPE_1
@@ -558,20 +602,22 @@ def recipe2(screen: pygame.Surface):
     Ui.image(screen, img, screenWidth//2, screenHeight//2 - 20)
 
     # Draw the back button.
-    if Ui.button(screen, "<", 95, 50, 55, mouseClicked, (167, 204, 64)):
+    img = pygame.image.load("Resources/Buttons/Back.png")
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.8), int(screenScale * img.get_height() * 0.8)))
+    if Ui.buttonBakedImage(screen, img, 103, 55, mouseClicked):
         return Types.MAIN_1
 
     # Draw the Co2 button.
-    img = pygame.image.load("Resources/Recipe Pages/Co2Button.png")
-    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
-    if Ui.buttonImage(screen, img, screenWidth - 80, 210, mouseClicked):
+    co2Scale = math.sin(time.time() * 5) / 8 + 0.875
+    if Ui.buttonCircle(screen, screenWidth - 100, 177, round(40 * co2Scale), mouseClicked, 2, (167, 204, 64), True, (217, 233, 188)):
         co2menu.lastMenu = Types.RECIPE_2
         return Types.CO2_COUNTER
+    Ui.text(screen, "Co2", screenWidth - 100, 177, round(25 * co2Scale), (0, 0, 0))
 
     # Draw the challenge button.
     img = pygame.image.load("Resources/Recipe Pages/ChallengeButton.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.87), int(screenScale * img.get_height() * 0.87)))
-    if Ui.buttonImage(screen, img, screenWidth//2, screenHeight - img.get_height()//2, mouseClicked):
+    if Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - img.get_height()//2, mouseClicked):
         return Types.CHALLENGE_2
 
     return Types.RECIPE_2
@@ -598,7 +644,7 @@ def challenge0(screen: pygame.Surface):
     # Show the pass button.
     img = pygame.image.load("Resources/Challenges/PassButton.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
-    if Ui.buttonImage(screen, img, screenWidth//2, screenHeight - 130, mouseClicked):
+    if Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - 130, mouseClicked):
         return Types.RECIPE_0
 
     return Types.CHALLENGE_0
@@ -625,7 +671,7 @@ def challenge1(screen: pygame.Surface):
     # Show the pass button.
     img = pygame.image.load("Resources/Challenges/PassButton.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
-    if Ui.buttonImage(screen, img, screenWidth//2, screenHeight - 130, mouseClicked):
+    if Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - 130, mouseClicked):
         return Types.RECIPE_1
 
     return Types.CHALLENGE_1
@@ -652,7 +698,7 @@ def challenge2(screen: pygame.Surface):
     # Show the pass button.
     img = pygame.image.load("Resources/Challenges/PassButton.png")
     img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.95), int(screenScale * img.get_height() * 0.95)))
-    if Ui.buttonImage(screen, img, screenWidth//2, screenHeight - 130, mouseClicked):
+    if Ui.buttonBakedImage(screen, img, screenWidth//2, screenHeight - 130, mouseClicked):
         return Types.RECIPE_2
 
     return Types.CHALLENGE_2
@@ -677,7 +723,9 @@ def co2menu(screen: pygame.Surface):
     Ui.image(screen, img, screenWidth//2, screenHeight//2 + 70)
 
     # Draw the back button.
-    if Ui.button(screen, "<", 95, 50, 55, mouseClicked, (167, 204, 64)):
+    img = pygame.image.load("Resources/Buttons/Back.png")
+    img = pygame.transform.scale(img, (int(screenScale * img.get_width() * 0.8), int(screenScale * img.get_height() * 0.8)))
+    if Ui.buttonBakedImage(screen, img, 45, 55, mouseClicked):
         return co2menu.lastMenu
 
     return Types.CO2_COUNTER
